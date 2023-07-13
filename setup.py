@@ -26,5 +26,5 @@ setuptools.setup(
     package_dir={'': 'sources'},
     packages=setuptools.find_packages(where="sources"),
     #package_data={'easyqc': ['easyqc.ui', 'easyqc.svg']},
-    python_requires=">=3.7",
+    python_requires=">=3.10",
 )
