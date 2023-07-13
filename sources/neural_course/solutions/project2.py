@@ -36,3 +36,20 @@ df.groupby('acronym')['half_peak_duration'].plot(kind='kde')  # KDE: kernel dens
 plt.xlabel('Peak val')  # Pandas uses matplotlib under the hood to plot
 # Add legends for the curves (acronyms)
 plt.legend(df.groupby('acronym').acronym.dtype.index.to_list(), title='Acronyms')
+
+##
+# Plot where are extreme spikes using viewephys GUI
+df_extreme = df.loc[np.abs(df['peak_val']) > 20]
+
+sample_ext = data.spikes['sample'][df_extreme.index]
+trace_ext = data.spikes['trace'][df_extreme.index]
+print(f'Extreme spikes are on {len(np.unique(trace_ext))} channels')
+
+# Instantiate viewephys
+ae = ViewSpikeModel(LOCAL_DATA_PATH, pid, time0)
+# Plotting the main GUI window
+ae.view()
+# Remove pink spikes
+ae.eqcs['ap'].ctrl.remove_layer_from_label('spikes')
+# Add your spikes
+ae.plot_index(sample_ext, channel=trace_ext)
