@@ -38,9 +38,11 @@ plt.xlabel('Peak val')  # Pandas uses matplotlib under the hood to plot
 plt.legend(df.groupby('acronym').acronym.dtype.index.to_list(), title='Acronyms')
 
 ##
-# Plot where are extreme spikes using viewephys GUI
+# Get extreme  spikes
 df_extreme = df.loc[np.abs(df['peak_val']) > 20]
 
+##
+# Plot where are extreme spikes using viewephys GUI
 sample_ext = data.spikes['sample'][df_extreme.index]
 trace_ext = data.spikes['trace'][df_extreme.index]
 print(f'Extreme spikes are on {len(np.unique(trace_ext))} channels')
@@ -53,3 +55,13 @@ ae.view()
 ae.eqcs['ap'].ctrl.remove_layer_from_label('spikes')
 # Add your spikes
 ae.plot_index(sample_ext, channel=trace_ext)
+
+
+##
+# Plot the distribution (using box plot) of half-peak duration for extreme spikes
+# with either positive or negative peak value
+
+# Create a new column
+df_extreme['pos_or_neg'] = np.where(df_extreme['peak_val'] > 0, 'Positive', 'Negative')
+# Box plot
+df_extreme.plot.box(column="half_peak_duration", by="pos_or_neg")
