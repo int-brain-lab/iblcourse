@@ -1,4 +1,7 @@
 '''
+THIS SCRIPT REQUIRES mayavi AND iblapps
+Please use iblenv to run it
+
 Neural course
 Plot the trajectories of the 3 selected PID in 3D
 '''
@@ -18,9 +21,9 @@ ba = AllenAtlas(25)
 allen = AllenAtlas()
 ba.compute_surface()
 
-pids = ['1e104bf4-7a24-4624-a5b2-c2c8289c0de7',
+pids = ['1a276285-8b0e-4cc9-9f0a-a3a002978724',
         '5d570bf6-a4c6-4bf1-a14b-2c878c84ef0e',
-        '6638cfb3-3831-4fc2-9327-194b76cf22e1']
+        'da8dfec1-d265-44e8-84ce-6ae9c109b8bd']
 
 # Download table of features
 path_features = Path('/Users/gaelle/Documents/Work/EphysAtlas/channels.pqt')
@@ -45,8 +48,14 @@ for pid in pids:
     xzy_trj = from_ins_xyz_ccf(ins_trj, pid, channels)
 
     # Plot
+    color = (0.2, 0.2, 0.2)  # Black
     mlab.points3d(xzy_trj[:, 1], xzy_trj[:, 2], xzy_trj[:, 0],
-                  color=(0.2, 0.2, 0.2))  # Black
+                  color=color)
 
-
-mlab.savefig('/Users/gaelle/Documents/Git/int-brain-lab/ibldevtools/Gaelle/courses/images/3_pids.png')
+    # set text
+    text_str = pid[0:8]
+    mlab.text3d(xzy_trj[-1, 1], xzy_trj[-1, 2], xzy_trj[-1, 0] - 500, text_str,
+                line_width=4, color=color, figure=fig, scale=300)
+##
+# ADJUST BY HAND THEN SAVE
+mlab.savefig('/Users/gaelle/Documents/Git/int-brain-lab/iblcourse/sources/neural_course/images/3_pids.png')
