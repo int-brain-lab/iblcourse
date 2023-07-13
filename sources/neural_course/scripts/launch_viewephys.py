@@ -1,7 +1,7 @@
 ##
 import numpy as np
 from pathlib import Path
-from ibldevtools.Gaelle.courses.neural_course_viewephys_model import ViewSpikeModel, LoadData
+from iblcourse.sources.neural_course.scripts.viewephys_model import ViewSpikeModel, LoadData
 
 LOCAL_DATA_PATH = Path('/Users/gaelle/Documents/Work/EphysAtlas/Data')
 pid = '5d570bf6-a4c6-4bf1-a14b-2c878c84ef0e'
