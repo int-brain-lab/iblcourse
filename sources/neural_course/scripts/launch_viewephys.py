@@ -10,10 +10,11 @@ time0 = 1500
 ##
 # Instantiate viewephys
 ae = ViewSpikeModel(LOCAL_DATA_PATH, pid, time0)
-# Plotting the main GUI window
+# Plot the main GUI window
 ae.view()
 
 ##
+# ---- ADVANCED GUI COMMANDS ----
 # Plotting just the pop-up window for a given spike
 ae.view_spike(iw=2284)
 # Adding some spike indices
