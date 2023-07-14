@@ -28,6 +28,7 @@ plot_peaktiptrough(df, data.waveforms, ax=ax[0], nth_wav=iw_pos)
 plot_peaktiptrough(df, data.waveforms, ax=ax[1], nth_wav=iw_neg)
 ax[0].set_title(f'Wav # {iw_pos} in {data.spikes.acronym[iw_pos]}')
 ax[1].set_title(f'Wav # {iw_neg} in {data.spikes.acronym[iw_neg]}')
+plt.show()
 
 ##
 # Plot half peak duration
@@ -36,10 +37,12 @@ df.groupby('acronym')['half_peak_duration'].plot(kind='kde')  # KDE: kernel dens
 plt.xlabel('Peak val')  # Pandas uses matplotlib under the hood to plot
 # Add legends for the curves (acronyms)
 plt.legend(df.groupby('acronym').acronym.dtype.index.to_list(), title='Acronyms')
+plt.show()
 
 ##
 # Get extreme  spikes
-df_extreme = df.loc[np.abs(df['peak_val']) > 20]
+df_extreme = df.loc[(df['peak_val'] < df['peak_val'].quantile(q=0.1)) |
+                    (df['peak_val'] > df['peak_val'].quantile(q=0.9))]
 
 ##
 # Plot where are extreme spikes using viewephys GUI
