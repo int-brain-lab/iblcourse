@@ -67,3 +67,4 @@ ae.plot_index(sample_ext, channel=trace_ext)
 df_extreme['pos_or_neg'] = np.where(df_extreme['peak_val'] > 0, 'Positive', 'Negative')
 # Box plot
 df_extreme.plot.box(column="half_peak_duration", by="pos_or_neg")
+plt.show()
