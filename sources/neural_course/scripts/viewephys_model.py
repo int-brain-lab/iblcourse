@@ -1,3 +1,5 @@
+import traceback
+
 import yaml
 import pandas as pd
 import numpy as np
@@ -105,24 +107,29 @@ class ViewSpikeModel(LoadData):
         sl['layer'].sigClicked.connect(self.click_on_spike_callback)
 
     def click_on_spike_callback(self, obj, toto, event):
-        t = event.pos().x() / 1e3
-        c = int(event.pos().y())
-        fs = self.fs_ap
-        ispi = np.arange(
-            np.searchsorted(self.spikes['sample'], int(t * fs) - 5),
-            np.searchsorted(self.spikes['sample'], int(t * fs) + 5) + 1
-        )
-        iw = ispi[np.argmin(np.abs(self.spikes['trace'].iloc[ispi] - c))]
-        print(iw)
+        try:
+            t = event.pos().x() / 1e3
+            c = int(event.pos().y())
+            fs = self.fs_ap
+            ispi = np.arange(
+                np.searchsorted(self.spikes['sample'], int(t * fs) - 5),
+                np.searchsorted(self.spikes['sample'], int(t * fs) + 5) + 1
+            )
+            iw = ispi[np.argmin(np.abs(self.spikes['trace'].iloc[ispi] - c))]
+            print(iw)
 
-        rwav, hwav, cind, sind = self.getwaveform(iw, return_indices=True)
-        wav = np.squeeze(self.waveforms[iw, :, :] * self.zscore[cind])
+            rwav, hwav, cind, sind = self.getwaveform(iw, return_indices=True)
+            wav = np.squeeze(self.waveforms[iw, :, :] * self.zscore[cind])
 
-        region = self.channels['acronym'][cind]
-        if len(cind) > 1:
-            region = region[0]
+            region = self.channels['acronym'][cind]
+            if len(cind) > 1:
+                region = region[0]
 
-        plot_spike_window(wav, fs=self.fs_ap, iw=iw, region=region)
+            plot_spike_window(wav, fs=self.fs_ap, iw=iw, region=region)
+        except Exception as e:
+            print(traceback.format_exc())
+            a = 1
+
 
     def view_spike(self, iw):
         cind = int(self.spikes.trace.to_numpy()[iw])
