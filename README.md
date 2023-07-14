@@ -39,7 +39,12 @@ conda activate coursenv
 or activate the [environment `iblenv`](https://github.com/int-brain-lab/iblenv/blob/master/README.md) if already installed.
 
 ### Install the necessary packages
-Once your environment is activated, type in the terminal the following command:
+Once your environment is activated, `cd` into the course repository 
+```
+cd iblcourse
+```
+
+Then type in the terminal the following command:
 ```
 pip install -e .
 ```
