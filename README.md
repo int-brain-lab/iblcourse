@@ -1,5 +1,8 @@
 # About
-This repository contains 
+This repository contains courses, using the IBL public datasets.
+
+The different courses are contained in the `sources` folder. Within each, a `course` notebook is given.
+Solutions to the course are provided in the `solutions` folder.
 
 # Installation
 

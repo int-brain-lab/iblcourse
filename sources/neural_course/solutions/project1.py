@@ -1,6 +1,5 @@
 ##
 # Load the data
-
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -25,12 +24,14 @@ vector1 = single_row[0:-2]
 vector2 = single_row[1:-1]
 index_cross = np.where((vector1 >= threshold) & (vector2 < threshold))[0]
 print(f'{len(index_cross)} spikes detected')
+
 ##
 # Plot the whole trace
 t_vector = np.arange(0, len(single_row)) * 1000 / data.fs_ap
 plt.plot(t_vector, single_row)
 plt.hlines(threshold, t_vector[0], t_vector[-1])
 plt.plot(t_vector[index_cross], single_row[index_cross], 'xr')
+plt.show()
 
 ##
 # Instantiate viewephys
