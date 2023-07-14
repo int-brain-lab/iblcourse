@@ -40,9 +40,9 @@ plt.legend(df.groupby('acronym').acronym.dtype.index.to_list(), title='Acronyms'
 plt.show()
 
 ##
-# Get extreme  spikes
-df_extreme = df.loc[(df['peak_val'] < df['peak_val'].quantile(q=0.1)) |
-                    (df['peak_val'] > df['peak_val'].quantile(q=0.9))]
+# Get extreme  spikes ; Note that we make a deep copy to later amend the dataframe
+df_extreme = df.loc[(df['peak_val'] < df['peak_val'].quantile(q=0.01)) |
+                    (df['peak_val'] > df['peak_val'].quantile(q=0.99))].copy()
 
 ##
 # Plot where are extreme spikes using viewephys GUI
