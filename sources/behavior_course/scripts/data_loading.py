@@ -73,24 +73,3 @@ df_sess_all.to_parquet(LOCAL_PATH.joinpath('sessions.pqt'), index=False)  # inde
 df_subj_all.to_parquet(LOCAL_PATH.joinpath('subjects.pqt'), index=False)
 df_trial_all.to_parquet(LOCAL_PATH.joinpath('trials.pqt'), index=False)
 
-##
-#
-# subject = 'SWC_043'
-# trials = one.load_aggregate('subjects', subject, '_ibl_subjectTrials.table')
-#
-# # Load training status and join to trials table
-# training = one.load_aggregate('subjects', subject, '_ibl_subjectTraining.table')
-# trials = (trials
-#           .set_index('session')
-#           .join(training.set_index('session'))
-#           .sort_values(by=['session_start_time', 'intervals_0']))
-# trials['training_status'] = trials.training_status.fillna(method='ffill')
-#
-# ##
-# from pathlib import Path
-# import dask.dataframe as dd
-# path_sess = Path('/Users/gaelle/Documents/Work/Course').joinpath('all_action_kernel_sessions.pqt')
-# path_trial = Path('/Users/gaelle/Documents/Work/Course').joinpath('all_blocked_trials.pqt')
-#
-# df_sess = dd.read_parquet(path_sess).compute()
-# df_trial = dd.read_parquet(path_trial).compute()
