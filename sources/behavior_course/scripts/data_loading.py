@@ -60,6 +60,9 @@ for index, eid in enumerate(sessions_bw):
     df_subj_all = pd.concat([df_subj_all, df_subj])
     df_trial_all = pd.concat([df_trial_all, df_trial])
 
+# Remove duplicates in subjects table
+df_subj_all = df_subj_all.drop_duplicates(subset=["subj_id"], keep='first')
+
 # Save dataframes
 df_sess_all.to_csv(LOCAL_PATH.joinpath('sessions.csv'))
 df_subj_all.to_csv(LOCAL_PATH.joinpath('subjects.csv'))
