@@ -35,7 +35,7 @@ def get_trial_sess_subj_df(eid, one):
     df_sess = df_sess.drop(columns=['projects', 'url', 'number', 'start_time'])
 
     # Hit database to get subject information
-    subj = one.alyx.rest('subjects', 'list', nickname=sess[0]['subject'])
+    subj = one.alyx.rest('subjects', 'list', nickname=sess[0]['subject'], lab=sess[0]['lab'])
     df_subj = pd.DataFrame.from_dict(subj)
     # Keep only some info
     keys_keep = ['lab', 'nickname', 'id', 'birth_date', 'sex']
