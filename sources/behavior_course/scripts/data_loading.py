@@ -30,7 +30,7 @@ def get_trial_sess_subj_df(eid, one):
     # Rename column id to eid
     df_sess = df_sess.rename(columns={"id": "eid"})
     # Get date
-    df_sess['date'] = df_sess['start_time'][0][0:10]
+    df_sess['date'] = pd.to_datetime(df_sess['start_time']).dt.date
     # Remove some columns
     df_sess = df_sess.drop(columns=['projects', 'url', 'number', 'start_time'])
 
@@ -38,11 +38,12 @@ def get_trial_sess_subj_df(eid, one):
     subj = one.alyx.rest('subjects', 'list', nickname=sess[0]['subject'])
     df_subj = pd.DataFrame.from_dict(subj)
     # Keep only some info
-    keys_keep = ['nickname', 'id', 'birth_date', 'sex']
+    keys_keep = ['lab', 'nickname', 'id', 'birth_date', 'sex']
     # Drop columns
     df_subj = df_subj[df_subj.columns[df_subj.columns.isin(keys_keep)]]
     # Rename column id to subj_id
     df_subj = df_subj.rename(columns={"id": "subj_id"})
+    df_subj = df_subj.rename(columns={"nickname": "subject"})
 
     return df_sess, df_subj, df_trials
 
@@ -62,6 +63,10 @@ for index, eid in enumerate(sessions_bw):
 
 # Remove duplicates in subjects table
 df_subj_all = df_subj_all.drop_duplicates(subset=["subj_id"], keep='first')
+
+# Sort
+df_sess_all = df_sess_all.sort_values(by=['subject', 'date'])
+df_subj_all = df_subj_all.sort_values(by=['subject'])
 
 # Save dataframes
 df_sess_all.to_csv(LOCAL_PATH.joinpath('sessions.csv'))
