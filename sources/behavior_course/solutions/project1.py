@@ -10,3 +10,5 @@ df_subj = pd.read_parquet(LOCAL_PATH.joinpath('subjects.pqt'))
 df_trial = pd.read_parquet(LOCAL_PATH.joinpath('trials.pqt'))
 
 ##
+# Compute reaction time
+df_trial['reaction_time'] = df_trial['response_times'] - df_trial['goCue_times']
