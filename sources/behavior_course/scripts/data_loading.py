@@ -1,4 +1,5 @@
 ##
+import numpy as np
 import pandas as pd
 from one.api import ONE
 from pathlib import Path
@@ -23,6 +24,7 @@ def get_trial_sess_subj_df(eid, one):
     trials = one.load_object(eid, 'trials', collection='alf')
     df_trials = trials.to_df()
     df_trials['eid'] = eid
+    df_trials['trial_number'] = np.arange(0, df_trials.shape[0])
 
     # Hit database to get session information
     sess = one.alyx.rest('sessions', 'list', id=eid)
@@ -56,6 +58,8 @@ for index, eid in enumerate(sessions_bw):
         df_subj_all = df_subj.__deepcopy__()
         df_trial_all = df_trial.__deepcopy__()
         continue
+    # Todo change to append in list, then do aggregate outside the loop for df
+
     # Concatenate subsequent df
     df_sess_all = pd.concat([df_sess_all, df_sess])
     df_subj_all = pd.concat([df_subj_all, df_subj])
