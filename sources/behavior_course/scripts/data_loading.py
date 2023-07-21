@@ -24,6 +24,7 @@ def get_trial_sess_subj_df(eid, one):
     trials = one.load_object(eid, 'trials', collection='alf')
     df_trials = trials.to_df()
     df_trials['eid'] = eid
+    # The index in the dataframe will be the trial number, but we put it here for simplicity
     df_trials['trial_number'] = np.arange(0, df_trials.shape[0])
 
     # Hit database to get session information
@@ -51,19 +52,22 @@ def get_trial_sess_subj_df(eid, one):
 
 
 # eid = sessions_bw[0]
+list_sess_all = list()
+list_subj_all = list()
+list_trial_all = list()
+
 for index, eid in enumerate(sessions_bw):
     df_sess, df_subj, df_trial = get_trial_sess_subj_df(eid, one)
-    if index == 0:  # Create first df from scratch
-        df_sess_all = df_sess.__deepcopy__()
-        df_subj_all = df_subj.__deepcopy__()
-        df_trial_all = df_trial.__deepcopy__()
-        continue
-    # Todo change to append in list, then do aggregate outside the loop for df
+    # Append in list, then do aggregate outside the loop for df
+    list_sess_all.append(df_sess)
+    list_subj_all.append(df_subj)
+    list_trial_all.append(df_trial)
 
-    # Concatenate subsequent df
-    df_sess_all = pd.concat([df_sess_all, df_sess])
-    df_subj_all = pd.concat([df_subj_all, df_subj])
-    df_trial_all = pd.concat([df_trial_all, df_trial])
+df_sess_all = pd.concat(list_sess_all)
+df_subj_all = pd.concat(list_subj_all)
+df_trial_all = pd.concat(list_trial_all)
+
+# df = pd.concat(list_of_dataframes)
 
 # Remove duplicates in subjects table
 df_subj_all = df_subj_all.drop_duplicates(subset=["subj_id"], keep='first')
@@ -76,4 +80,3 @@ df_subj_all = df_subj_all.sort_values(by=['subject'])
 df_sess_all.to_parquet(LOCAL_PATH.joinpath('sessions.pqt'), index=False)  # index=False to get rid of Unnamed column
 df_subj_all.to_parquet(LOCAL_PATH.joinpath('subjects.pqt'), index=False)
 df_trial_all.to_parquet(LOCAL_PATH.joinpath('trials.pqt'), index=False)
-
