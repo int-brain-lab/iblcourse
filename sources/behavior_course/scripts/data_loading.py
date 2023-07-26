@@ -47,6 +47,8 @@ def get_trial_sess_subj_df(eid, one):
     # Rename column id to subj_id
     df_subj = df_subj.rename(columns={"id": "subj_id"})
     df_subj = df_subj.rename(columns={"nickname": "subject"})
+    # Add in subj id to df_sess for merging later
+    df_sess['subj_id'] = df_subj['subj_id']
 
     return df_sess, df_subj, df_trials
 
