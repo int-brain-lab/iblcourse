@@ -1,4 +1,3 @@
 ibllib
 viewephys
 ibl-neuropixel
-tabulate
