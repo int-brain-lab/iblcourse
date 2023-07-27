@@ -55,3 +55,23 @@ df_trial_pos_rt.plot.box(column="reaction_time", by="sex")
 
 # Plot the distribution of reaction time per subject using `boxplot`
 df_trial_pos_rt.plot.box(column="reaction_time", by="subject")
+
+##
+# -----
+
+import pandas as pd
+from pathlib import Path
+import numpy as np
+import seaborn as sns
+
+
+LOCAL_PATH = Path('/Users/gaelle/Documents/Work/Course')
+
+# Load the data
+df_sess = pd.read_parquet(LOCAL_PATH.joinpath('sessions.pqt'))
+df_subj = pd.read_parquet(LOCAL_PATH.joinpath('subjects.pqt'))
+df_trial = pd.read_parquet(LOCAL_PATH.joinpath('trials.pqt'))
+
+# Merge to get the sex column
+df_sess = df_sess.merge(df_subj[['subject', 'sex']], on='subject')
+df_trial = df_trial.merge(df_sess[['eid', 'sex']], on='eid')
