@@ -1,30 +1,12 @@
 ##
 '''
 Project 1
-
-Using the df_trial_ch dataframe:
-
-Compare the reaction times on the first and last N trials:
-
-Define N: for this, you will need to first find the minimum session length (in terms of trial number), and use 1/3 of this value as N. For example, if the minimum session length is 300, you will set N as int(300/3) = 100 (we use integers).
-Across all sessions, select the first and last N trials.
-Using the K-S test, assess whether the reaction time distributions (across all mice) are different for first versus last trials.
-Plot the two distributions using boxplot.
-Are the reaction times significantly different for first and last trials?
-Compare male and female mice:
-
-Group the data by male and female mice.
-Using the K-S test, assess whether the session length (i.e. number of trial) distributions are different for male versus female mice
-Plot the distributions using histogram
-Do you think that male mice do longer sessions than female mice?
-Using the K-S test, assess whether the reaction time distributions in late trials (only) are different for male versus female mice
-Plot the distributions using KDE
-Do female mice respond differently than male mice in late trials?
 '''
 
 import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
+from scipy.stats import ks_2samp
 
 LOCAL_PATH = Path('/Users/gaelle/Documents/Work/Course')
 
@@ -51,6 +33,10 @@ Define N: for this, you will need to first find the minimum session length (in t
 and use 1/3 of this value as N. For example, 
 if the minimum session length is 300, you will set N as int(300/3) = 100 (we use integers).
 Across all sessions, select the first and last N trials.
+Using the K-S test, assess whether the reaction time distributions (across all mice) 
+are different for first versus last trials.
+Plot the two distributions using boxplot.
+Are the reaction times significantly different for first and last trials?
 '''
 # Find min session length, and compute N accordingly
 min_n_trial = min(df_trial_ch.groupby('eid').size())
@@ -60,40 +46,53 @@ n_trial = int(min_n_trial/3)
 df_first = df_trial_ch.groupby('eid').head(n_trial)
 df_last = df_trial_ch.groupby('eid').tail(n_trial)
 
+# Note: if you want to take arbitrary rows, here from 23:69:
+df_arbit = df_trial_ch.groupby('eid').apply(lambda x: x[23:69])
 
+# KS-test
+results_ks = ks_2samp(df_first['reaction_time'], df_last['reaction_time'])
+print(results_ks)
 
+# Plot
+# Merge the df
+df_first['trial_type'] = 'first'
+df_last['trial_type'] = 'last'
+df_merge = pd.concat([df_first, df_last])
+
+# Create 2 subplots with linear and log y-axis
+fig = plt.figure(figsize=(9, 3))
+ax = plt.subplot(1, 2, 1)
+df_merge.plot.box(column="reaction_time", by="trial_type", ax=ax)
+ax.set_yscale('linear')
+
+ax = plt.subplot(1, 2, 2)
+df_merge.plot.box(column="reaction_time", by="trial_type", ax=ax)
+ax.set_yscale('log')
 ##
-# Questions in text
+'''
+Compare male and female mice:
 
-# Count how many trials for M / F mice
-tr_fm = min(df_trial.groupby('sex')['reaction_time'].size())
-print(tr_fm)
-# Proportion of Female over Male mice
-pr_fm = tr_fm['F'] / tr_fm['M']
+Group the data by male and female mice.
+Using the K-S test, assess whether the session length (i.e. number of trial) distributions are different for 
+male versus female mice
+Plot the distributions using histogram
+Do you think that male mice do longer sessions than female mice?
+Using the K-S test, assess whether the reaction time distributions in late trials (only) are different for 
+male versus female mice
+Plot the distributions using KDE
+Do female mice respond differently than male mice in late trials?
+'''
 
-# Get negative RTs
-df_trial_neg_rt = df_trial[df_trial['reaction_time'] < 0]
+df_n_trial = df_trial_ch.groupby('eid', as_index=False).size()  # The size is the N trial
+# Merge to get sex information
+df_n_trial = df_n_trial.merge(df_trial_ch[['eid', 'sex']], on='eid')
+df_n_trial = df_n_trial.drop_duplicates()  # Remove all duplicates row per trials
 
-# Plot the distribution of trial number for negative reaction time per subject
-df_trial_neg_rt.plot.box(column="trial_number", by="subject")
-# Count how many trials for each subject
-tr_sub = df_trial_neg_rt.groupby('subject')['reaction_time'].count()
-print(tr_sub)
-# outlier subject: KS023
+ks_2samp(df_n_trial.groupby('sex').get_group('M')['size'],
+         df_n_trial.groupby('sex').get_group('F')['size'])
 
-##
-# Further questions
+# Plot the KDE for both male and female mice
+df_n_trial.groupby('sex')['size'].plot(kind='kde')
 
-# Get positive RTs
-df_trial_pos_rt = df_trial[df_trial['reaction_time'] > 0]
-
-# Plot the distribution of reaction time for male and female mice using `hist`, and `boxplot`
-# Histogram
-df_trial_pos_rt.groupby('sex')['reaction_time'].plot(kind='kde')
 # Add legends for the curves (sex)
-plt.legend(df_trial_pos_rt.groupby('sex').sex.dtype.index.to_list(), title='Sex')
-# Box plot
-df_trial_pos_rt.plot.box(column="reaction_time", by="sex")
-
-# Plot the distribution of reaction time per subject using `boxplot`
-df_trial_pos_rt.plot.box(column="reaction_time", by="subject")
+plt.legend(df_trial.groupby('sex').sex.dtype.index.to_list(), title='Sex')
