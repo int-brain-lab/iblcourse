@@ -77,6 +77,7 @@ Using the K-S test, assess whether the session length (i.e. number of trial) dis
 male versus female mice
 Plot the distributions using histogram
 Do you think that male mice do longer sessions than female mice?
+
 Using the K-S test, assess whether the reaction time distributions in late trials (only) are different for 
 male versus female mice
 Plot the distributions using KDE
@@ -88,11 +89,25 @@ df_n_trial = df_trial_ch.groupby('eid', as_index=False).size()  # The size is th
 df_n_trial = df_n_trial.merge(df_trial_ch[['eid', 'sex']], on='eid')
 df_n_trial = df_n_trial.drop_duplicates()  # Remove all duplicates row per trials
 
-ks_2samp(df_n_trial.groupby('sex').get_group('M')['size'],
-         df_n_trial.groupby('sex').get_group('F')['size'])
+# Plot the histogram for both male and female mice
+# Note the difference in sample size
+df_n_trial.groupby('sex')['size'].plot(kind='hist')
+# Add legends for the curves (sex)
+plt.legend(df_n_trial.groupby('sex').sex.dtype.index.to_list(), title='Sex')
+
+# KS test
+results_ks = ks_2samp(df_n_trial.groupby('sex').get_group('M')['size'],
+                      df_n_trial.groupby('sex').get_group('F')['size'])
+print(results_ks)
+
+# --- Last trials ---
+
+# KS test
+results_ks = ks_2samp(df_last.groupby('sex').get_group('M')['reaction_time'],
+                      df_last.groupby('sex').get_group('F')['reaction_time'])
+print(results_ks)
 
 # Plot the KDE for both male and female mice
-df_n_trial.groupby('sex')['size'].plot(kind='kde')
-
+df_last.groupby('sex')['reaction_time'].plot(kind='kde')
 # Add legends for the curves (sex)
-plt.legend(df_trial.groupby('sex').sex.dtype.index.to_list(), title='Sex')
+plt.legend(df_last.groupby('sex').sex.dtype.index.to_list(), title='Sex')
