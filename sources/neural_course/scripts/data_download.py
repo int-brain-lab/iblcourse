@@ -13,7 +13,8 @@ from neurodsp.voltage import destripe
 from one.remote import aws
 from brainbox.io.one import SpikeSortingLoader
 
-LOCAL_DATA_PATH = Path('/Users/gaelle/Documents/Work/EphysAtlas/Data')
+LOCAL_DATA_PATH = Path.home().joinpath('iblcourse', 'neural_course', 'data')
+LOCAL_DATA_PATH.mkdir(parents=True, exist_ok=True)
 one = ONE(base_url='https://alyx.internationalbrainlab.org')
 
 pids = [  # http://benchmarks.internationalbrainlab.org.s3-website-us-east-1.amazonaws.com/#/0/4
