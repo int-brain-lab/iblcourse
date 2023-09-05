@@ -2,7 +2,6 @@
 # Load the data
 import numpy as np
 import matplotlib.pyplot as plt
-from pathlib import Path
 from iblcourse.sources.neural_course.scripts.viewephys_model import LoadData, ViewSpikeModel
 from neurodsp.waveforms import compute_spike_features, plot_peaktiptrough
 from neural_course.scripts.data_download import LOCAL_DATA_PATH
