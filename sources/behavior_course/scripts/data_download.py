@@ -9,7 +9,8 @@ tag = '2022_Q4_IBL_et_al_BWM'
 one.load_cache(tag=tag)
 sessions_bw = one.search()  # All sessions used in the paper
 
-LOCAL_PATH = Path('/Users/gaelle/Documents/Work/Course')
+LOCAL_DATA_PATH = Path.home().joinpath('iblcourse', 'behavior_course', 'data')
+LOCAL_DATA_PATH.mkdir(parents=True, exist_ok=True)
 
 ##
 # To return to the full cache containing an index of all IBL experiments

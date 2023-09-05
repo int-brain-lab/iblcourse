@@ -4,16 +4,14 @@ Project 1
 '''
 
 import pandas as pd
-from pathlib import Path
 import matplotlib.pyplot as plt
 from scipy.stats import ks_2samp
-
-LOCAL_PATH = Path('/Users/gaelle/Documents/Work/Course')
+from behavior_course.scripts.data_download import LOCAL_DATA_PATH
 
 # Load the data
-df_sess = pd.read_parquet(LOCAL_PATH.joinpath('sessions.pqt'))
-df_subj = pd.read_parquet(LOCAL_PATH.joinpath('subjects.pqt'))
-df_trial = pd.read_parquet(LOCAL_PATH.joinpath('trials.pqt'))
+df_sess = pd.read_parquet(LOCAL_DATA_PATH.joinpath('sessions.pqt'))
+df_subj = pd.read_parquet(LOCAL_DATA_PATH.joinpath('subjects.pqt'))
+df_trial = pd.read_parquet(LOCAL_DATA_PATH.joinpath('trials.pqt'))
 
 ##
 # Compute reaction time
