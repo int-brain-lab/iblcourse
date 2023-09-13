@@ -7,7 +7,7 @@ Plot the trajectories of the 3 selected PID in 3D
 '''
 import numpy as np
 import pandas as pd
-from ibllib.atlas import NeedlesAtlas, AllenAtlas, Insertion
+from iblatlas.atlas import NeedlesAtlas, AllenAtlas, Insertion
 from one.api import ONE
 from pathlib import Path
 from ibllib.pipes.histology import interpolate_along_track

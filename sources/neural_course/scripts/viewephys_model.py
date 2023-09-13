@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from neurodsp.waveforms import plot_peaktiptrough, compute_spike_features
 from neurodsp.utils import rms
 
-from ibllib.atlas import BrainRegions
+from iblatlas.regions import BrainRegions
 from ibllib.plots import wiggle
 from ibllib.plots import Density
 
