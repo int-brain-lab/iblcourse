@@ -58,4 +58,4 @@ for pid in pids:
                 line_width=4, color=color, figure=fig, scale=300)
 ##
 # ADJUST BY HAND THEN SAVE
-mlab.savefig('/Users/gaelle/Documents/Git/int-brain-lab/iblcourse/sources/neural_course/images/3_pids.png')
+mlab.savefig('/Users/gaelle/Documents/Git/int-brain-lab/iblcourse/2022-undergrad-africa/neural_course/images/3_pids.png')
