@@ -11,7 +11,7 @@ from ibldsp.waveforms import get_waveforms_coordinates
 
 regions = BrainRegions()
 
-np1_data = Path('/Users/admin/Downloads/cajal/np1')
+np1_data = Path(r'C:\Users\TeachingLab\Documents\Cajal2025\2025-06-15_spike-sorting-IBL\data\cajal\np1')
 ap_file = next(np1_data.joinpath('raw_ephys_data').glob('*ap*.*bin'))
 sr_ap = spikeglx.Reader(ap_file)
 
