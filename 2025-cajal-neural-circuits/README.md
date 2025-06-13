@@ -20,7 +20,14 @@ uv pip install ipython
 Windows
 ```shell
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+Restart powershell and then:
+```
 uv python install 3.12
+
+New-Item -Path "C:\Users\TeachingLab\Documents\Cajal2025\2025-06-15_spike-sorting-IBL" -ItemType Directory -Force
+cd C:\Users\TeachingLab\Documents\Cajal2025\2025-06-15_spike-sorting-IBL
+
 uv venv iblenv
 uv pip install ibllib
 uv pip install viewephys
