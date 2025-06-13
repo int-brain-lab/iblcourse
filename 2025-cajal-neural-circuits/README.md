@@ -52,5 +52,5 @@ cd C:\Users\TeachingLab\Documents\Cajal2025\2025-06-15_spike-sorting-IBL
 git clone https://github.com/int-brain-lab/iblcourse.git
 # download and unzip the dataset
 Invoke-WebRequest -Uri "https://ibl-brain-wide-map-public.s3.us-east-1.amazonaws.com/sample_data/cajal/cajal.zip" -OutFile "cajal.zip"
-Expand-Archive -Path "cajal.zip" -DestinationPath ".\cajal_data" -Force
+Expand-Archive -Path "cajal.zip" -DestinationPath ".\data" -Force
 ```
