@@ -4,6 +4,7 @@ import sys
 import numpy as np
 import scipy.signal
 import matplotlib.pyplot as plt
+import matplotlib
 
 from viewephys.gui import viewephys
 import spikeglx
@@ -11,6 +12,8 @@ import one.alf.io as alfio
 from iblatlas.regions import BrainRegions
 from ibldsp.waveforms import double_wiggle
 from ibldsp.waveforms import get_waveforms_coordinates
+
+matplotlib.use('Qt5Agg')
 
 regions = BrainRegions()
 
