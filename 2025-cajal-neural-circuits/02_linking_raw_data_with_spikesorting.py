@@ -1,17 +1,28 @@
-import scipy.signal
-from viewephys.gui import viewephys
-import numpy as np
 from pathlib import Path
+import sys
+
+import numpy as np
+import scipy.signal
+import matplotlib.pyplot as plt
+
+from viewephys.gui import viewephys
 import spikeglx
 import one.alf.io as alfio
 from iblatlas.regions import BrainRegions
 from ibldsp.waveforms import double_wiggle
-import matplotlib.pyplot as plt
 from ibldsp.waveforms import get_waveforms_coordinates
 
 regions = BrainRegions()
 
-np1_data = Path(r'C:\Users\TeachingLab\Documents\Cajal2025\2025-06-15_spike-sorting-IBL\data\cajal\np1')
+if sys.platform == 'win32':
+    # Windows paths
+    np1_data = Path(r'C:\Users\TeachingLab\Documents\Cajal2025\2025-06-15_spike-sorting-IBL\data\cajal\np1')
+    np2_data = Path(r'C:\Users\TeachingLab\Documents\Cajal2025\2025-06-15_spike-sorting-IBL\data\cajal\np2')
+else:
+    # macOS or Linux paths
+    np1_data = Path.home().joinpath('Documents/Cajal2025/2025-06-15_spike-sorting-IBL/data/cajal/np1')
+    np2_data = Path.home().joinpath('Documents/Cajal2025/2025-06-15_spike-sorting-IBL/data/cajal/np2')
+
 ap_file = next(np1_data.joinpath('raw_ephys_data').glob('*ap*.*bin'))
 sr_ap = spikeglx.Reader(ap_file)
 
@@ -24,6 +35,7 @@ waveforms = alfio.load_object(ss_path, 'waveforms', attribute=['templates'])
 
 # %%
 # Load the raw data snippet and destripe it
+CHUNK_OFFSET = 1699
 t0 = 0  # Seconds in the recording
 s0 = int(sr_ap.fs * t0)
 dur = int(0.2 * sr_ap.fs)
@@ -32,7 +44,7 @@ butter_kwargs = {'N': 3, 'Wn': 300 / sr_ap.fs * 2, 'btype': 'highpass'}
 sos = scipy.signal.butter(**butter_kwargs, output='sos')
 butt = scipy.signal.sosfiltfilt(sos, raw_ap)
 
-s0 = 50970000 # TO DO A MORE ELEGANT WAY TO GET THIS
+s0 = int(CHUNK_OFFSET * sr_ap.fs)  # This is the start of the chunk in samples
 slice_spikes = slice(*np.searchsorted(spikes.samples, [s0, s0 + dur]))
 
 ss = (spikes.samples[slice_spikes] - s0) / sr_ap.fs
@@ -41,12 +53,12 @@ color_map = np.array([[0, 255 , 0, 255], [255, 0, 0, 255]]).astype(np.uint8)
 brush = color_map[cluster_attribute[spikes.clusters[slice_spikes]].astype(int), :]
 eqc = viewephys(butt, sr_ap.fs, title='Butterworth high-pass filtered', channels=channels, t0=t0, t_scalar=1, br=regions)
 eqc.ctrl.add_scatter(ss, clusters.channels[spikes.clusters[slice_spikes]],
-                     label='spikes', rgb=(0, 255, 0, 255))#, brush=brush)
+                     label='spikes', rgb=(0, 255, 0, 100))#, brush=brush)
 
 wrc, winds = get_waveforms_coordinates(
     clusters.channels[spikes.clusters[slice_spikes]], extract_radius_um=200, return_indices=True)  # (nw, ntrw)
 
-ZERO_SAMPLE = 41  # this is the sample that contains the peak amplitude
+ZERO_SAMPLE = 41  # this is the sample that contains the peak amplitude in the waveforms
 NSW = waveforms['templates'].shape[2]
 
 # %%
@@ -88,4 +100,4 @@ def on_click(plot, points):
         fig.show()
 
 scatter_item.sigClicked.connect(on_click)
-%gui qt
+# %gui qt5
