@@ -11,6 +11,8 @@ cd C:\Users\TeachingLab\Documents\Cajal2025\2025-06-15_spike-sorting-IBL
 git -C iblcourse pull 
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\iblenv\Scripts\Activate.ps1  # activate environment
+uv pip install numpy==2.2  # this is temporary: ETA end of June 2025 numba will be compatible with numpy 2.3
+
 jupyter lab
 ```
 
@@ -46,6 +48,7 @@ uv venv iblenv
 .\iblenv\Scripts\Activate.ps1
 # install dependencies
 uv pip install ibllib viewephys jupyterlab
+uv pip install numpy==2.2  # this is temporary: ETA end of June 2025 numba will be compatible with numpy 2.3
 ```
 
 Download the course material: lectures and data
@@ -73,6 +76,7 @@ cd ~/Documents/Cajal2025/2025-06-15_spike-sorting-IBL
 uv venv iblenv
 source iblenv/bin/activate
 uv pip install ibllib viewephys jupyterlab
+uv pip install numpy==2.2  # this is temporary: ETA end of June 2025 numba will be compatible with numpy 2.3
 ```
 
 Download the data and the course materials.
