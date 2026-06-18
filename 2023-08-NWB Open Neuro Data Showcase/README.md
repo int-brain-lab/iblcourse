@@ -1,4 +1,4 @@
-# 2023 Neuro data without border
+# 2023 Open Neuro Data Showcase
 Notes of the event:
 
 - Granada https://neurodatawithoutborders.github.io/nwb_hackathons/HCK16_2023_Granada_RH/
